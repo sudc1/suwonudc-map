@@ -25,7 +25,11 @@ a{color:inherit}
 /* top bar */
 .top{position:fixed;left:0;right:0;top:0;z-index:20;padding:calc(env(safe-area-inset-top) + 12px) 16px 0;pointer-events:none}
 .brand{display:flex;align-items:baseline;gap:10px;pointer-events:auto}
-.logo{display:block;height:24px;width:auto;margin:0 0 8px;pointer-events:auto}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 8px}
+.logo{display:block;height:24px;width:auto;pointer-events:auto}
+.lang{display:inline-flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.94);border:1px solid var(--line);pointer-events:auto;flex:0 0 auto}
+.lang button{border:0;background:none;height:30px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
 .brand h1{margin:0;font-size:18px;line-height:1.3;font-weight:700;letter-spacing:-0.02em;text-wrap:balance}
 .top .sub{margin:3px 0 0;font-size:13px;color:var(--muted);pointer-events:auto}
 .beta{font-size:12px;font-weight:700;color:#fff;background:var(--ink);border-radius:999px;padding:3px 9px;transform:translateY(-2px)}
@@ -87,6 +91,10 @@ a{color:inherit}
 .list .flag{display:inline-block;font-size:11.5px;font-weight:700;color:var(--warn-ink);background:var(--warn-bg);border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:1px}
 .grouph{font-size:13px;font-weight:700;color:var(--muted);padding:14px 16px 4px}
 .empty{padding:20px 16px;color:var(--muted);font-size:14.5px}
+.about{margin:4px 16px 8px;padding:14px 16px;border-radius:12px;background:var(--soft);font-size:14px;line-height:1.6}
+.about h2{margin:0 0 6px;font-size:16px;line-height:1.35}
+.about p{margin:0 0 6px}
+.about p:last-child{margin:0}
 .foot{padding:18px 16px 8px;font-size:12.5px;line-height:1.6;color:var(--muted);border-top:1px solid var(--line);margin:14px 16px 0}
 .foot p{margin:0 0 6px}
 
@@ -109,10 +117,29 @@ a{color:inherit}
 .acts a.primary{grid-column:1 / -1;background:var(--ink);color:#fff;border-color:var(--ink)}
 
 /* desktop */
+@media (max-width:899px){
+  .compass{display:none}
+  .top{padding-top:calc(env(safe-area-inset-top) + 8px)}
+  .toprow{margin-bottom:6px}
+  .logo{height:20px}
+  .lang button{height:28px;padding:0 10px;font-size:12.5px}
+  .brand{gap:8px}
+  .brand h1{font-size:16px;line-height:1.3}
+  .beta{font-size:11px;padding:2px 7px;transform:none}
+  .top .sub{display:none}
+  .chips{padding:8px 16px 6px;gap:6px}
+  .chip{height:34px;font-size:13.5px;padding:0 12px 0 10px}
+  .search input{font-size:16px}
+  .zoom #zin,.zoom #zout{display:none}
+  .zoom{right:12px;bottom:calc(var(--sheet-peek) + 12px)}
+  .zoom button.fit{width:auto;height:34px;padding:0 14px;border-radius:999px;font-size:13px;box-shadow:0 2px 10px rgba(30,43,53,.16)}
+  body:not(.zoomed) .zoom{display:none}
+}
 @media (min-width:900px){
   :root{--sheet-peek:0px}
   .top{left:400px;padding:18px 24px 0}
   .logo{height:28px}
+  .toprow{max-width:720px}
   .brand h1{font-size:22px}
   .top .sub{font-size:14px}
   .chips{margin:0;padding:14px 0 0;flex-wrap:wrap;overflow:visible}
@@ -128,9 +155,12 @@ a{color:inherit}
 </head>
 <body>
 <div class="top">
-  <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAA8CAYAAAC9xKUYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDc5Qjg0QTAxMUNDMTFFRkI0OTA4N0E5QjkxQTcyQjUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDc5Qjg0QTExMUNDMTFFRkI0OTA4N0E5QjkxQTcyQjUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENzlCODQ5RTExQ0MxMUVGQjQ5MDg3QTlCOTFBNzJCNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENzlCODQ5RjExQ0MxMUVGQjQ5MDg3QTlCOTFBNzJCNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PhwgmyoAABWRSURBVHja7F0LmFTF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" alt="수원도시공사" width="140" height="30">
-  <div class="brand"><h1>시민과 함께, 수원도시공사 사업장 안내</h1><span class="beta">베타</span></div>
-  <p class="sub">가까운 공사 시설의 위치와 하는 일을 확인하세요.</p>
+  <div class="toprow">
+    <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAA8CAYAAAC9xKUYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDc5Qjg0QTAxMUNDMTFFRkI0OTA4N0E5QjkxQTcyQjUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDc5Qjg0QTExMUNDMTFFRkI0OTA4N0E5QjkxQTcyQjUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENzlCODQ5RTExQ0MxMUVGQjQ5MDg3QTlCOTFBNzJCNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENzlCODQ5RjExQ0MxMUVGQjQ5MDg3QTlCOTFBNzJCNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PhwgmyoAABWRSURBVHja7F0LmFTFla4ZQDS6oqCYMTEiupkEI6BRs25gxbcRh6jRhPiI4CNDWEF8EFiJSlCixkgMvugAooQlZuEzwgirBMMoRFDRIGYNrYIo6hh0DSSAGSBO/r/v6czlTlXde7tvN909db7v9MCtunUfVfXf86pTVSppSqUPx+/54C+Cf63qa+cpR44ctTtqaWlRHRMClT3wOxh8BbgWPD7z7/ranbHaaWiqxu++4M7gv6i6mo9dNzlyVL5UlQCw1INHgw8BTwNfD2DZHAFMuuP3DHB/8JHCXQK1toPXg/8A/j34CfBLAJ5PXNc5clTJEkwqPRC/k8CfB/8ZPBDAsjAEVCiZXAD+HvgEC8C9Bn5F/n4I/gi8F/hU8FfBP3Pd58hR6VN8gEml98PvveCL5Mhq8CCAy1sWYOmE3+HgH4APMNRaAv5v8AJIKO+7rnHkqL0BTCr9FfzOBX9WjjwN/rpVJWpootRxP/hfNaVUdWaCfwxQ+aPrDkeO2ivApNIXK8/G0tkncZwNcNlmABbaZ+4AjzK0uDwj1dTVrHLd4MhRZVI0I28qPTojZbQS1aJ+AJe/GsBlf0UXtVInGqSW8eAfAVz+7rrAkaPKJBp5wwEmlR6L39t8Rz4AH2e0uTQ0HSjSzZGaUko73wSwLIh7sxcvX0Vpi56nAwUYafhtmnVC3x2uKx05KkeASaUvw+/0wNGzAC7/awAXupkbwX0N4HIywOW5GKDyZfz5hvK8R7196lmWKAHRhb0U/Cj4aQCOc2E7clTyAJNKc1ITSPx2mikAl+8ZwIVBcpRMztSU7swcr6t5KiKwDMKfG8HHxnymN5Rn95kBoHHqlyNHJQkwqfTB+F0l6kiW6Dr+gtFj1NA0Dr+3Gq51DcDl7gjA8jn8mQo+Pc9n470PBcg4A7IjRyUFMKk0j/0GfEqg5LsAl6kGcDlSJrXOK7UQ4DIwArichj+PgLsm9HyMAq4HyDxUjJfZZVxjP/y5WbW642kb2uqrMn/zxAE3FeC6DB34mqJdzLNRsQ9oJ6MhfjF4Ea77ieX84/Hnh8pbO6Yjnv9dX316B48CU33eu8CvldeeHfE9ZO/rOvC/+4q43KRZ/p1Ge9+K0I98Hz3Buo+pth9x3jLVGr5RKJqLa18fY2wcnDFpeJH2WfNCS+C5rkGbS0Le64Xg/wR3MlQ7C228pwMYHSAM1YDLWqodlmd5wAAuH8uNRVGJ5loewE9cMvAS+E2ZwNUysQhyjA7uJvX4Ymag7YMAMncUGmDwgpehM9gRf5D70UlVSQLLvykvovl4Q5XTZLK9jro34P7mGu77eZQPlvvroanSPVCfwP0izqHa+yz4UwV8rZvAsyO+/+x9Xao8J8NX8+jHwQLQPWL0I8Hl0AIPswNiPgsn/TQ8D6Phf20aShHe60Nog/NsuqHaHqbzqwPSCyfnnZp6PzUuXGxoos2lv6H9yZBe1oeAS/8I4LJBcY2TUgcDLI4BXwGeCL4bPAk8Flwnk4GucUYEZ20wt+MalxZDikFnUHJ40FDcIUFwGYM/v7OAi58oUc3BORxoHQz3vVk+EnGe9eWQj85uIdwXJcdJCfTj9EpRVfA8jylv2U0+RE3gz3FPCkodozUqCqWEhy1t3Gg4TunlJyHg0j0EXNgGxdHJAJDtYQ8jHqRnyGibYu598iVP4f+rUP5yEfpzo+H4vgmBCyXC2zVFHEA3KK5C95Zk/Eeg/HIB3fqY922jNwzHCX7TEnjcV3M8760Erv1hzPr9lEooO4Fng0wlPC6blLduMFeQ+gRj7x38c//cACaVrsHvCE0d5nTZYpBeegX03V30RUgvYZ10j0GdyOjL4PMACjkNMpz3OjsKwDJKgG46/n18EdzYpuf5dALgQhH8LoMqMQCDoEnq0W3/AvhLQTsayuag3uICv4M3cI2i2L4MVHQPIp73nQQl1I2qNCn23PGrSMMM+vT/WM63qR4zQ6QX2hC+aSimHaN/ruASABp6r85TXhzNd4rQCV8wHP88Bk5Vnm1fqdrGApHuy4KLDPa/4c8thjauUo4cFYk6ivTSUQZvkKjPLrGcf7bh+FZRVWw0xnD8XUoeAIYPknpItDUfgJbNW1OwL6sYwvoZivcTieKVPC5xiuH4bzTHFlvE70qnPSOaBApKGA9HKM+LU22oshYfg4ZK7ojsg9PNWaMpf8miHtEF1svQ7jKoR9tDbC+DTMUAhKakHxRt0iC5QiSnQtHJym7p/1ae7R9iAeWgyM6lFLo+2AsDv0uFA0wXC8gXU22ijYr2qAmKjpK2fHkRb2ffmMcTBZhzDeUvWs61RdmuDrlunQHVfwEgaCzg89IT1a2A7Y8JKR+Gyf0vebRvsml103w9maBrD4NU+tcKB5j9YgJPIUGGc+jOmKftUSnvpCPUow4WacJmA+llKUuHXFenRjAA6NZCPizAi262BYVoGxP628pbMxWczJ0CQMAv1xU5XmYFuI/mOA3tz2mO6WilLfCuQshkaN8H/fQpPP+2It/P8zHrm6Tgljzu4cCYx+PQm3ivuuNV1QIUpq+6zd33OUvZn0JuSDdJGgEAr5XjaMbLZVBXMG5iq0zyoM3lctS/NsdLTTUcH44299RIazr6eTuwwRxlKfvSbrif5pj1+xqOv5zj+DyM4Goo7l1YCcaLfjWRzRZiUzW2hFz3M5pjj5YhsFSJNMKI2r0CkstgfClXos45yjN4+5/5LhxnKPpo1Im8cwLFbZw3RXkePz/RmMhgumGi/kxU+kWnvI9ftAOA6Wsp652DRFGs8ZRNon9ZoIixTTQG5xob0yfHskQA5hhLuW3wd87jup0N4n+5AAvvn3ak7ytvDVBwMFwIMFggoLAO9Qfgn/MCaiUD5s5BGfXzWaj3/xEvfzX4INXWbkaPni0Wg8srvoHrVPQqczFgH22pcpJKJgiwEPYaGuXvEU6SBljKejC+CtfOJzjxMJy/vs3RW721SEdYTvxbjhfcP4dz0iU6YBnXQs8TB+6hAsgEFV3MEBe8DcHLXhsYOG/IosKs/aXKJ8kxTmcSyin+0iC4RnmBc6tx3gu6QYi6zJFzlUgqYUbjHXKNmyQ+ptLpXGV3R9ftJjvM7hq/tLGeH1KN8Wh3FuL67IjDLOU2F5ZtXcIhIdfdqALW61kn9C1VzwbVRObAsa37WS2TnVGyLYavE20yjKSlDeQmkTiyQFMtX93sl3et7asj17gHbXEJBxenZldTd/WpqAQsxsdMQ/1328lkqhIJz0YEZAZcTsnzWrRpPB6xusmD0w/tNOZxG1vQt2eH1LnAYJLwE72bP0VbOwsBMDZbis2FZRPHw9Y8rFP6XQZKUWzdjJfP4LRFAZAhCDAh16+4AjdGeyvxZ5DYYLhq9zwBlmqfJHdqNvQc9YYo/areoHq5QtogZwcKJ9yVBgt/ltbnEdb/F8Px80UtTIIexP1NiFj3khD7S5Zuxv09gnY35Tl3Tszz2brl2cbmEBCk4T+KZ5ZjcYRI2IkDjE1Ksbmw3rSUnRByXRrZzvAfuHj5qq6QYj4qcZBhXhR6ulbmKxXQNqOY+BwsdgOqXjRAzpbVvFkaksBAthG3nskVYCgh0W4QjNvYWyWXKyZSfiC8Q25ZPFlTxKUuwQBIrgt7kKqmSeKsEOL+ZYcHjlFTeEzA2E8T8T6ekbidRAHGtj7miyEgYaI+qqGpq6qrMQEGt4C9UXOt35WyJFMoPVXaXqLsyzJK8Z1skPifqSq5RGG5qCt9RV0JStzca+syAegGtWtwJ201s3Hu0BxtU1RDT9rNXbDT8D4Ye0XPpi5SmF4qZjCoDUjk9II+gXMH4X0sTxJgWiwgU2s5l0F4mwz6ZQfpwOkWkX6diGZZ6l/KALMbidJFmJ7OnR90nrmfSR9ZVaQ8QeZRDEp6zOgsMKXd4OpuXRwGMx2+F3KJDyzA0l1E+9Ga56edb6DYvhaiLuOCgnliqKL2QRnTvc6P42ETe0Us+wmuQ1sI15MxC2F3AUR6D9+Wd7RE7jdXoCWAUtK+zaAq3oL2fyl1vy7z0J8ki1LeMyijF+snuix1calKpdKbLLaWdaq+9nDj2Q1NjKm42FDK9UimRFRUiWiM8+fpXQkV6TiHJzkNLFMftnEfoi4HkS7YjHEzuqUO89DGOcW6v5B22MZwUXGOFlW8owE0T5O1QP7zR4qdodoAZAQMpvn4rfKC9XQ2iYfR7pCYz89lNRPkHds0Bnq2mIVgPK7xp4hts2+OFVWIOYAONtmdgrYsnMssfIsMmgqjvRkd/qJ8BDhXlyt93Iy2H5kyszrkC9cTANTDUm5L5dAPAGQDDHpT/HaMYwE6xzq4KDj186ljfh5T6jcuqiTH60iReIPgQgmEMS59guAi50+W83RpL2lvpMeFyz1WJgT8HcA/kon6NRW+0SFDHxgsuUaAIwqtFElssAFc/ihgO0HzPt4RcGKOoWC0cbUAOFWq1+IEhAZVpLeUPZfo6cocXk4vCm/SlOx4grzYNgRp5WMACmM5/LlCbzHVLzHJoJiTqko58r+PB8Qrdn/2Q6m8MAEaLmeK8dx2/rM4nwZ1Zjq8SP5mMwnQrni6GPXzHTvst4flGkHi/d4rqhEn+DVqV28uzQ5UPa/EvUwPeZ53xGPXqFoNulwUyy2CqA412NaeSTzQ9XRTizZyrtwTzRyMoTofdebnY4NJq7bpFf10iRFg6mp2QkrhV+HHhnPPRPlA006OAJnHADLMBZvda+lM/P8CHJ9TsBGaSg+D2jelPc9RpV/TQiPtIWUEMvTm0YO1WiSbOOe3iGqwSMCgh6hEz8Rty0L/ZQAXLon5tkTtkp7E9WcKQPTcxXyB0YqyV8OMrgIyNGRTY/g/5WUUbIn5TqhNMDn+HWhrb1GjW5gUPp+XQIBZEypSp9I9MSlNXwZ+SUZZdL8UQKa3xaM0SiSos+T/UwEyqwEy6QKACw2BjMqtNIAhgO9t0OmDA2mJzgAo8TYzyuWB8RxPJdjWepWnsTvwLrkQWLdFDSfxpT5wyV4/641bEVCjKEUQTI8OAwwBiHcTeh9bVdvV+TkDTBTPzUgBAp0UsxUAMlaZU2TScv4g6pyLui0aKWY7pRYR5waJSrIQxwagbEPC45LbiqyLUf/QCHpzkMYa7BlT5KtWiMl2kVOeSopot9B69dBXWwx9yO1jFovK5icaVU9UMT1WpUIdxUjEiMx9rS8slb4NUozJsj1LjExnGcrpEmMMyfUGVWkbAOU8Qf1xIio+j2PnoCwRJMX9V0vbl8WYuLHFZQwSU0xFc56Ro8HrEIhpw7pWmbdE6Y1rvu3me9HpDIukaaOFGoDJtlemAFNf+3dMvkZlTjpF2lO+viYppgUSylAxXh1kaOM61GlG3XEGkKEH4GaACg1KdyvP27EM/6dP/w6Ub83zWa8QO0NFxNoI+DH6slmZAwCrYzRJIJqnOf6cD9QOV/ZcKyYyxcecnkMG/TV49jUl3j2m0I61Iee9HrO9spBglE89sdFVAKIZAKSXDSCzEQDCFAYMPd/L0MYNqNM901ZdTbMBaOh37w9goVg4TL7QV+L/tPVwU/v420Ok0rTKc03G4xlArSzie7ld5bmxGyYtYz9+G1KN/ZvkepVc8ptwv6vxJd4nJrU6LJNgSwIfipKi7I3PU+aFa1niAP657EBgGH41TC/ApeE7QiSJpQAa64JIAMnTYBq+ukmb1F1HAWhOzeE5GdF6oDLvuljOksw2FZ7gy1FxyZRbpUfIeYfGbK9MJJj62o8BHLSjDA+pf7xIAmMtILMQ4MFYFsYlmNL0HZdRpxqaqP7chXO2WICmWdSacNWmoalHRtSvq/nEJ70QnLg8/zWRrhzlTmsNalQxaU0ZvCd6uHobbCmvW84zxYAtLm+A8Yiib30EUXsMJu1SgNICC8g8hclOGwoXVZkSWnUWUXcE6tLmMg3nvZ/TUzQ0MTCIGeLWK/+GY6k0ffkz/vl89bUtDiPykpa4YLDBvYlIqt9IzVwa2WVc41S8xzbmARxntkOdk4QRyU+Wu4pEKYYPMivieXMweb9i19ZraKthxORDIW11E1DYAKBYBL4afAy4kwVQuoBPAk8EcxdIRgPPxjV/+E/pJZVmdPF8kaI2VKJ65KhkgZgxXHdripgDaXJwh0/8f7/M+NV/3EeU8y4QQXsKDWjcHGzPkPNoxH0ck/hkANMrFpBh7omhAAFObkb89g25l9NUq5tuB84jMLzvs+kwmIxh3dkMXVwfwSjiOzPxOK2SC+0tTAmRzdZ3M+5zezsc671k8OZL6VzXorRjukF5HrfgTprMKXQE+mWSfPgoff9A6TNLjsF7f6KcX8KuAFNf+yYm50Rl3tfYT1yVuxT163De0hBphuVHAzC4mpSxMEwAFBbARgmmp9o1fDpLXPl6f4bpvdpFOE2zoxb5VLNlqoDbxZYIMa2nbs1UUntAceXyKocZsaQY5k6uE3VpSKD4ZGET8WN4Ndoo+4hznfuLMRVRDWldMpM5lb4kUu26mifA9AIxlJruZy6WjOIBoe2Eq0IfEAnnM2hnvAZcuKZquQ9ctmfsSpVve5nspnRpggyY8WHMe/P7iOOczpE+lQAuOhWJUkwzJiqzjD8fQVVSUmdmRl1ifEt97dYIQMNYFm9/3oYmSjJ0zzF7P1WbriLd0BDGVaF00aVxjjmq1nOdUzK6NaDHXof7ebXI73ST0rsVPyrgQH5AIoiZwWyfAlyiPapHlJJ1MV9v59A/jNBd6FvFTfvlp0XlZ/J8zodG8JNcl1TC74R5YXQqtzFZeJVl0nKwxt0/hhNrJCb1/KI9cipN8Z0pG78cKJmL+7jAfUcdOdo9xIRTVSGTl6L3iBzaZjJoGlaXF+zuU2mGTzOv73c0QMlVqafg+ttcNztyVLoA00F5q6QvzPEaDGyjMXY+Jnv+m355CxaZaJmWeAbQ6WxIdBH2w/U+dF3syFEpA0wyIEPiMgQm2nkqo2vW10ZfT5RK05DMNIf0QHFV9mcttV8RyeUD172OHJUDwLSCDONNrk3o2u+JpMGwaca50JPULBIJjZQ0gNHTxGTER0Rsk+7oswEum13XOnJUTgDTCjSX4vc+ldymWknRvRnwq6/d4brVkaNyBRgPZOhO5m4CR5XAM9DOMhzAMsd1pyNHpQcw8fNM1NcyCI8u4e+r3Zsm4BFwLwcujhyVLuW3JUYqzTVBdBUzDWWnIt2zt4dPfe0LrvscOao0FUkPNNxR4DrlxaQcUIB7pW2FqR8mA1hWuK5z5Kg9AUwr0FCKoTuZLu1T8wQbgkqj8tzbjwJYNrouc+SoPQPMrmDDto9U3qZudDfXKm9lNNca7eNTqRgjw/VL3E6EGdO4qPFZ8AuZTHuOHDkqW4D5hwADAI4C+/QMJ/GYAAAAAElFTkSuQmCC" alt="수원도시공사" width="140" height="30">
+    <div class="lang" role="group" aria-label="언어 선택 / Language"><button type="button" data-lang="ko" aria-pressed="true">한국어</button><button type="button" data-lang="en" aria-pressed="false">English</button></div>
+  </div>
+  <div class="brand"><h1 id="ttl">시민과 함께, 수원도시공사 사업장 안내</h1><span class="beta" id="betaTag">베타</span></div>
+  <p class="sub" id="subt">가까운 공사 시설의 위치와 하는 일을 확인하세요.</p>
   <div class="chips" id="chips" role="toolbar" aria-label="목적별로 보기"></div>
 </div>
 
@@ -151,7 +181,7 @@ a{color:inherit}
     <span class="bar"></span>
     <span class="sum"><strong id="sumTitle">전체 사업장</strong><span class="cnt" id="sumCnt"></span></span>
   </button>
-  <div class="search" id="searchWrap"><input id="q" type="search" placeholder="시설 이름으로 찾기 (예: 수영장, 캠핑)" aria-label="시설 이름으로 찾기"></div>
+  <div class="search" id="searchWrap"><input id="q" type="search" placeholder="시설 이름으로 찾기 (예: 수영장, 캠핑)" aria-label="시설 이름으로 찾기" autocomplete="off"></div>
   <div class="body" id="body" aria-live="polite"></div>
 </aside>
 
@@ -175,6 +205,27 @@ const shade=(hex,f)=>{const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b
   const m=v=>Math.max(0,Math.min(255,Math.round(f<0?v*(1+f):v+(255-v)*f)));return "#"+((1<<24)+(m(r)<<16)+(m(g)<<8)+m(b)).toString(16).slice(1)};
 
 let cat="전체", query="", selected=null, view="list";
+const EN = {"facilities": {"SUDC-001": {"name": "Jangan-gu Community Center", "type": "Community center (lifelong learning, sports, performances)", "addr": "101 Songwon-ro, Jangan-gu, Suwon-si, Gyeonggi-do (Jowon-dong)", "tel2": "Automated line 031-228-3000", "hours": "Weekdays 06:00–22:00 / Sat 09:00–18:00 / Sun 10:00–17:00", "closed": "2nd and 4th Sundays", "what": "A community center offering lifelong-learning classes, a swimming pool, gym and squash courts, plus performances and exhibitions.", "facilities": "Lifelong-learning and culture classes; Pureunae swimming pool, gym, squash; Hannuri Art Hall performances and exhibitions; venue rental; senior programs", "short": "Jangan Community Center"}, "SUDC-002": {"name": "Suwon Sports Complex", "type": "Sports complex", "addr": "893 Gyeongsu-daero, Jangan-gu, Suwon-si, Gyeonggi-do", "tel2": "National Sports Center 031-228-2701", "hours": "Varies by game and event (see the monthly schedule on the website)", "closed": "Varies by game and event", "what": "A sports complex with a main stadium, baseball park and indoor arena, plus a National Sports Center for public use.", "facilities": "Main stadium, baseball park, Suwon Gymnasium, National Sports Center, artificial-turf field, outdoor basketball court, little-league field, venue rental", "short": "Suwon Sports Complex"}, "SUDC-003": {"name": "Seosuwon Chilbo Gymnasium", "type": "Gymnasium and sports center", "addr": "171 Seosuwon-ro 577beon-gil, Gwonseon-gu, Suwon-si, Gyeonggi-do", "tel2": "", "hours": "Weekdays 06:10–21:30 / Weekends 09:10–17:40", "closed": "2nd and 4th Sundays, public holidays, and days set by SUDC", "what": "An indoor arena for rental, a sports center with gym, yoga, group exercise and table tennis, and outdoor sports fields.", "facilities": "Indoor arena, gym, yoga room, group exercise room, table tennis, artificial-turf field, outdoor basketball and badminton courts, gateball, park golf", "short": "Chilbo Gymnasium"}, "SUDC-004": {"name": "Gwanggyo Wellbeing National Sports Center", "type": "National sports center", "addr": "71 Wellbeingtown-ro, Yeongtong-gu, Suwon-si, Gyeonggi-do (Iui-dong)", "tel2": "", "hours": "See the facility website", "closed": "See the facility website", "what": "A national sports center with a swimming pool, group exercise room, multipurpose gym and billiards room.", "facilities": "Swimming pool, group exercise room, multipurpose gym, multipurpose field, billiards room, online class registration", "short": "Gwanggyo Wellbeing Center"}, "SUDC-005": {"name": "Hwasan Sports Park", "type": "Sports park (driving range, par-3 course)", "addr": "263 Taean-ro, Byeongjeom-gu, Hwaseong-si, Gyeonggi-do (inside the Suwon Ecological Water Resource Center)", "tel2": "", "hours": "Par-3, 9 holes: Apr–Oct 07:00–18:00 / Nov–Mar 08:00–17:00", "closed": "Last Monday of each month", "what": "A sports park with a golf driving range, a 9-hole par-3 course, and fields for ball games and inline skating.", "facilities": "Golf driving range, par-3 9-hole course, golf academy, artificial-turf field, tennis, basketball, jokgu (foot volleyball), inline skating rink, ecological park", "short": "Hwasan Sports Park"}, "SUDC-006": {"name": "Gwanggyo Lake Family Campground", "type": "Family campground", "addr": "57 Gwanggyohosu-ro, Yeongtong-gu, Suwon-si, Gyeonggi-do (Ha-dong)", "tel2": "", "hours": "Check-in 14:00 on the day of stay, check-out 11:00 the next day", "closed": "Last Monday of each month (next day if that Monday is a public holiday)", "what": "A family campground inside Gwanggyo Lake Park, booked in advance online.", "facilities": "Camping sites, online reservations, nearby attractions guide", "short": "Gwanggyo Lake Campground"}, "SUDC-007": {"name": "Suwon Family & Women's Center", "type": "Education center for women and families", "addr": "119 Maesan-ro, Paldal-gu, Suwon-si, Gyeonggi-do (Gyo-dong)", "tel2": "", "hours": "09:00–21:00", "closed": "Sundays and public holidays", "what": "A center offering gender-equality education, regular classes, and venue rental.", "facilities": "Gender academy, outreach gender-equality education, regular classes, special programs, venue rental, memorial exhibition room", "short": "Family & Women's Center"}, "SUDC-008": {"name": "Suwon Yeonhwajang Memorial Park", "type": "Public funeral and memorial facility", "addr": "278 Gwanggyohosu-ro, Yeongtong-gu, Suwon-si, Gyeonggi-do", "tel2": "Funeral hall reception 031-228-2401", "hours": "Crematorium daily 07:00–16:00 / Funeral hall open 24 hours", "closed": "Open all year", "what": "A public facility with a crematorium, funeral hall, and columbarium.", "facilities": "Crematorium, funeral hall, memorial halls, columbarium wall, natural burial, online memorial, live funeral listings", "short": "Yeonhwajang Memorial Park"}, "SUDC-009": {"name": "Suwon Long-term Care Support Center", "type": "Long-term care support agency", "addr": "612 Gyeongsu-daero, Paldal-gu, Suwon-si, Gyeonggi-do", "tel2": "", "hours": "Weekdays 09:00–18:00", "closed": "Weekends and public holidays", "what": "Provides information and counseling on long-term elderly care, and training for care workers.", "facilities": "Long-term care counseling, refresher training for care workers, training for disability support workers, care facility directory", "short": "Long-term Care Center"}, "SUDC-010": {"name": "Hanareum Call Center", "type": "Mobility service for people with limited mobility", "addr": "310 Jeongjo-ro, Gwonseon-gu, Suwon-si, Gyeonggi-do", "tel2": "", "hours": "24 hours", "closed": "Open all year", "what": "Runs accessible vehicles for people with disabilities and others who have difficulty using public transport.", "facilities": "Vehicle information, eligibility, user registration, how to book"}, "SUDC-011": {"name": "Suwon Resource Recycling Center", "type": "Recycling and volume-based waste bags", "addr": "278-1 Gwanggyohosu-ro, Yeongtong-gu, Suwon-si, Gyeonggi-do (Ha-dong)", "tel2": "Waste bag phone orders 031-228-2500", "hours": "Weekdays 09:00–18:00", "closed": "Weekends and public holidays", "what": "Receives household waste, sorts and sells recyclables, and supplies volume-based waste bags.", "facilities": "Household waste collection, recyclable sales, waste bag orders and retailer list", "short": "Recycling Center"}, "SUDC-012": {"name": "Public Parking (69 lots)", "type": "Public and annex parking lots", "addr": "Office: Parking Management Team, 1F Main Stadium, 893 Gyeongsu-daero, Jangan-gu, Suwon-si", "tel2": "", "hours": "Varies by lot (see the parking website)", "closed": "Varies by lot", "what": "Runs 69 public and annex parking lots, with online prepayment and monthly passes.", "facilities": "See each lot on the map"}, "SUDC-013": {"name": "Resident Priority Parking & Towing Lot", "type": "Resident parking and vehicle towing", "addr": "304 Jeongjo-ro, Gwonseon-gu, Suwon-si, Gyeonggi-do (Resident Parking & Towing Team)", "tel2": "", "hours": "See the facility website", "closed": "See the facility website", "what": "Assigns resident priority parking spaces and stores towed vehicles.", "facilities": "Resident priority parking applications, towed vehicle storage and return"}, "SUDC-014": {"name": "License Plate Office", "type": "Vehicle license plates", "addr": "1600 Seobu-ro, Gwonseon-gu, Suwon-si, Gyeonggi-do", "tel2": "", "hours": "Weekdays 09:00–18:00", "closed": "Weekends and public holidays", "what": "Issues new and replacement vehicle license plates and fits them.", "facilities": "Main office (new and replacement plates, fitting); SK and Deutsch branches (for vehicles registered at those dealerships only)", "short": "License Plate Office"}, "SUDC-015": {"name": "Suwon Station Transfer Center", "type": "Transfer center", "addr": "136 Sehwa-ro, Gwonseon-gu, Suwon-si, Gyeonggi-do", "tel2": "", "hours": "See the facility website", "closed": "See the facility website", "what": "Operates the bus and rail transfer center at Suwon Station.", "facilities": "Transfer center operation", "short": "Suwon Stn. Transfer Center"}, "SUDC-016": {"name": "Gwanggyo Jungang Station Transfer Center", "type": "Transfer center", "addr": "B 45 Docheong-ro, Yeongtong-gu, Suwon-si, Gyeonggi-do (underground)", "tel2": "", "hours": "See the facility website", "closed": "See the facility website", "what": "Operates the bus transfer center at Gwanggyo Jungang Station.", "facilities": "Transfer center operation", "short": "Gwanggyo Jungang Transfer"}, "SUDC-017": {"name": "SUDC Headquarters (The Ham Park)", "type": "Head office", "addr": "3F The Ham Park, 126 Suin-ro, Gwonseon-gu, Suwon-si, Gyeonggi-do", "tel2": "", "hours": "Weekdays 09:00–18:00", "closed": "Weekends and public holidays", "what": "The head office of Suwon Urban Development Corporation.", "facilities": "Civil petitions, recruitment and public information", "short": "SUDC Headquarters"}, "SUDC-018": {"name": "Development Projects Division", "type": "Urban development", "addr": "3F The Ham Park, 126 Suin-ro, Gwonseon-gu, Suwon-si, Gyeonggi-do", "tel2": "", "hours": "Weekdays 09:00–18:00", "closed": "Weekends and public holidays", "what": "Carries out urban development, housing, urban renewal and commissioned development projects.", "facilities": "Tapdong Innovation Valley (Tapdong IV), urban development, housing construction, urban renewal, commissioned development"}}, "parking": {"성대 환승(구)": "Sungkyunkwan Univ. Transfer Parking (old)", "꽃뫼환승": "Kkotmoe Transfer Parking", "세류역환승": "Seryu Station Transfer Parking", "성균관대역 환승": "Sungkyunkwan Univ. Station Transfer Parking", "교동 공영": "Gyo-dong Public Parking", "인계 공영": "Ingye Public Parking", "영통 공영": "Yeongtong Public Parking", "대황교화물": "Daehwanggyo Truck Parking", "율전 공영": "Yuljeon Public Parking", "율전 제2공영": "Yuljeon Public Parking No. 2", "광교 공영": "Gwanggyo Public Parking", "터미널 공영": "Bus Terminal Public Parking", "영화동 지하": "Yeonghwa-dong Underground Parking", "영화동 지상": "Yeonghwa-dong Surface Parking", "인계동주택가 공영": "Ingye-dong Residential Public Parking", "만석 5주차장": "Manseok Parking No. 5", "곡반정동 제2공영": "Gokbanjeong-dong Public Parking No. 2", "백설 공영": "Baekseol Public Parking", "권선동지하 공영": "Gwonseon-dong Underground Public Parking", "매봉 공영": "Maebong Public Parking", "우만공원 공영": "Uman Park Public Parking", "매탄공원 공영": "Maetan Park Public Parking", "화홍문 공영": "Hwahongmun Gate Public Parking", "광교 원천호수": "Gwanggyo Woncheon Lake Parking", "창룡 공영": "Changnyong Public Parking", "광교 행복한들": "Gwanggyo Haengbokhandeul Parking", "신대호수": "Sindae Lake Parking", "광교 카페거리1 공영": "Gwanggyo Cafe Street Public Parking No. 1", "광교중앙마을": "Gwanggyo Jungang Village Parking", "광교대학로 제2공영": "Gwanggyo Daehak-ro Public Parking No. 2", "광교대학로 제1공영": "Gwanggyo Daehak-ro Public Parking No. 1", "장안동 공영": "Jangan-dong Public Parking", "만석 1주차장": "Manseok Parking No. 1", "만석 2주차장": "Manseok Parking No. 2", "만석 3주차장": "Manseok Parking No. 3", "만석 4주차장": "Manseok Parking No. 4", "연무동 공영": "Yeonmu-dong Public Parking", "농수산물도매시장": "Agricultural & Fishery Wholesale Market Parking", "수원시청 본관": "Suwon City Hall Main Building Parking", "선경도서관": "Seongyeong Library Parking", "수원시청·시의회(지상)": "Suwon City Hall & City Council Surface Parking", "영통구청 부설": "Yeongtong-gu Office Parking", "수원시청 별관(지하)": "Suwon City Hall Annex Underground Parking", "남수동 공영": "Namsu-dong Public Parking", "화성박물관(팔달구청)": "Hwaseong Museum (Paldal-gu Office) Parking", "권선구청 부설": "Gwonseon-gu Office Parking", "장다리길": "Jangdari-gil Parking", "영통중앙길": "Yeongtong Jungang-gil Parking", "영통우체국": "Yeongtong Post Office Parking", "매탄4지구": "Maetan District 4 Parking", "신동 제1": "Sin-dong Parking No. 1", "수원화물차고지": "Suwon Truck Depot", "광교홍재도서관": "Gwanggyo Hongjae Library Parking", "역세권1지구": "Station Area District 1 Parking", "파장동 맛고을거리": "Pajang-dong Food Street Parking", "곡반정동 제7공영": "Gokbanjeong-dong Public Parking No. 7", "일월수목원": "Irwol Arboretum Parking", "우만2동": "Uman 2-dong Parking", "곡반정동 제8공영": "Gokbanjeong-dong Public Parking No. 8", "화서시장": "Hwaseo Market Parking", "구운공원": "Guun Park Parking", "화서동 먹거리촌": "Hwaseo-dong Food Village Parking", "고등동": "Godeung-dong Parking", "율전 제3": "Yuljeon Parking No. 3", "광교 외식타운": "Gwanggyo Dining Town Parking", "신동 제3": "Sin-dong Parking No. 3", "수원시의회(지하)": "Suwon City Council Underground Parking", "인계동 행정복지센터": "Ingye-dong Community Center Parking", "서둔동 행정복지센터": "Seodun-dong Community Center Parking"}};
+let lang="ko";
+try{ if(location.hash==="#en") lang="en"; else { const v=localStorage.getItem("sudc-map-lang"); if(v==="en"||v==="ko") lang=v; } }catch(e){}
+const L=(ko,en)=>lang==="en"?en:ko;
+const CAT_EN={"전체":"All","운동·배우기":"Sports & classes","캠핑·여가":"Camping & leisure","장례·추모":"Funeral & memorial","돌봄·복지":"Care & welfare",
+  "이동 지원":"Mobility support","환경·자원순환":"Recycling","주차하기":"Parking","교통·차량 서비스":"Transport & vehicles","공사 본사·개발사업":"HQ & development"};
+const GU_EN={"장안구":"Jangan-gu","권선구":"Gwonseon-gu","팔달구":"Paldal-gu","영통구":"Yeongtong-gu","수원시 외":"Outside Suwon","여러 구":"Several districts","확인 필요":"To be confirmed"};
+const DIV_EN={"공영":"Public","부설":"Annex","현장운영":"Staffed on site"};
+const catName=c=>L(c,CAT_EN[c]||c), guName=g=>L(g,GU_EN[g]||g);
+const fx=(f,k)=>lang==="en"&&EN.facilities[f.id]?EN.facilities[f.id][k]:f[k];
+const pName=p=>lang==="en"?(EN.parking[p.name]||p.name):p.name;
+const nameOf=it=>it.id.startsWith("P")?pName(it):fx(it,"name");
+const SHORT_KO={"SUDC-002":"종합운동장","SUDC-003":"칠보체육관","SUDC-004":"광교웰빙센터","SUDC-006":"광교호수캠핑장","SUDC-007":"가족여성회관",
+  "SUDC-008":"연화장","SUDC-009":"장기요양지원센터","SUDC-011":"자원순환센터","SUDC-015":"수원역 환승센터","SUDC-016":"광교중앙역 환승센터","SUDC-017":"공사 본사"};
+const SHORT_EN={"SUDC-001":"Jangan Center","SUDC-002":"Sports Complex","SUDC-003":"Chilbo Gym","SUDC-004":"Wellbeing Center","SUDC-005":"Hwasan Park",
+  "SUDC-006":"Lake Campground","SUDC-007":"Women's Center","SUDC-008":"Yeonhwajang","SUDC-009":"Care Center","SUDC-011":"Recycling Center",
+  "SUDC-014":"Plate Office","SUDC-015":"Suwon Stn. Transfer","SUDC-016":"Gwanggyo Transfer","SUDC-017":"SUDC HQ"};
+const narrow=()=>innerWidth<600;
+const labelOf=f=>lang==="en"?((narrow()&&SHORT_EN[f.id])||EN.facilities[f.id].short||EN.facilities[f.id].name)
+  :((narrow()&&SHORT_KO[f.id])||f.name.replace(/\(.*\)/,"").trim());
+const opName=o=>lang==="en"?(o.includes("민간위탁")?"SUDC (contracted operator)":o.includes("현장운영")?"SUDC (on-site)":"SUDC"):o;
 const F = DATA.facilities, PK = DATA.parking;
 const markers = F.filter(f=>f.x!==undefined);
 const T={k:1,x:0,y:0};
@@ -194,6 +245,7 @@ function building(g,f){
     el("rect",{x:-11,y:-12,width:4,height:5,fill:"#fff",opacity:.75},g);el("rect",{x:-5,y:-9,width:4,height:5,fill:"#fff",opacity:.75},g);}
   else{cube(g,10,11,c)}
   el("ellipse",{class:"ring",cx:0,cy:-6,rx:f.grade==="A"?24:16,ry:f.grade==="A"?24:16},g);
+  el("circle",{class:"hit",cx:0,cy:-10,r:30,fill:"transparent"},g);
 }
 function label(g,f,dx,dy,anchor){
   const lg=el("g",{class:"lbl"},g); const t=el("text",{x:dx,y:dy,"text-anchor":anchor},lg); t.textContent=f.name.replace(/\(.*\)/,"").trim();
@@ -203,35 +255,35 @@ function draw(){
   const ground=el("g",{filter:"url(#drop)"},world);
   for(const d of DATA.districts){el("path",{d:d.d,transform:"translate(0,12)",fill:GROUND[d.name][1],stroke:GROUND[d.name][1],"stroke-width":2,"stroke-linejoin":"round"},ground)}
   for(const d of DATA.districts){el("path",{d:d.d,fill:GROUND[d.name][0],stroke:"#fff","stroke-width":2.2,"stroke-linejoin":"round"},ground)}
-  for(const d of DATA.districts){const t=el("text",{x:d.cx,y:d.cy+(d.name==="팔달구"?42:0),"text-anchor":"middle","font-size":30,"font-weight":800,fill:"#1E2B35",opacity:.16,"letter-spacing":"-0.02em"},world);t.textContent=d.name}
+  for(const d of DATA.districts){const t=el("text",{x:d.cx,y:d.cy+(d.name==="팔달구"?42:0),"text-anchor":"middle","font-size":30,"font-weight":800,fill:"#1E2B35",opacity:.16,"letter-spacing":"-0.02em"},world);t.textContent=d.name;d.t=t}
   el("path",{d:DATA.fort.d,fill:"#D9C3A0",opacity:.55,stroke:"#8A6A45","stroke-width":2.4,"stroke-dasharray":"4 2.5"},world);
   fortress();
   /* Hwasan: outside the city edge */
   const hw=F.find(f=>f.id==="SUDC-005");
   const hwg=el("g",{id:"hwdeco"},world);
   el("path",{d:`M${hw.x} ${DATA.bbox[3]-6} L${hw.x} ${hw.y-26}`,stroke:"#5B6B76","stroke-width":1.6,"stroke-dasharray":"5 4",fill:"none"},hwg);
-  const ht=el("text",{x:hw.x+30,y:hw.y+30,"font-size":12,"font-weight":700,fill:"#5B6B76"},hwg);ht.textContent="수원 경계 밖 화성시";
+  const ht=el("text",{x:hw.x+30,y:hw.y+30,"font-size":12,"font-weight":700,fill:"#5B6B76"},hwg);ht.textContent="수원 경계 밖 화성시";hwT=ht;
   /* parking layer */
   const pl=el("g",{id:"parking"},world);
   for(const p of PK){const g=el("g",{class:"mk pk","data-id":p.id,tabindex:0,role:"button","aria-label":`${p.name} 주차장, ${p.cells}면`},pl);
     el("rect",{x:-9,y:-9,width:18,height:18,rx:5,fill:"#3355C8",stroke:"#fff","stroke-width":2},g);
     const t=el("text",{x:0,y:4.5,"text-anchor":"middle","font-size":12,"font-weight":800,fill:"#fff"},g);t.textContent="P";
-    el("circle",{class:"ring",cx:0,cy:0,r:14},g); p.g=g}
+    el("circle",{class:"ring",cx:0,cy:0,r:14},g); el("circle",{class:"hit",cx:0,cy:0,r:22,fill:"transparent"},g); p.g=g}
   /* facilities, south first so northern ones overlap correctly */
   const ml=el("g",{id:"facs"},world);
   for(const f of [...markers].sort((a,b)=>a.y-b.y)){
     const g=el("g",{class:"mk fac","data-id":f.id,tabindex:0,role:"button","aria-label":`${f.name}, ${f.cat}`},ml);
     building(g,f); f.g=g;}
   const ov=el("g",{id:"labels"},svg), lines=el("g",{id:"leaders"},ov);
-  for(const f of markers){const name=f.name.replace(/\(.*\)/,"").trim();let w=0;for(const ch of name)w+=/[\x00-\x7F]/.test(ch)?7.4:12.8;
+  for(const f of markers){
     const lg=el("g",{class:"lbl lblx","data-id":f.id,"aria-hidden":"true"},ov);
-    el("rect",{x:0,y:0,width:w+16,height:20,rx:8},lg);const t=el("text",{x:8,y:14.5},lg);t.textContent=name;
-    f.lg=lg;f.lw=w+16;f.ld=el("line",{stroke:"#5B6B76","stroke-width":1.6,"stroke-linecap":"round"},lines);
+    f.lr=el("rect",{x:0,y:0,width:20,height:20,rx:8},lg);f.lt=el("text",{x:8,y:14.5},lg);
+    f.lg=lg;f.lw=20;f.ld=el("line",{stroke:"#5B6B76","stroke-width":1.6,"stroke-linecap":"round"},lines);
     lg.style.cursor="pointer";lg.addEventListener("click",e=>{if(moved>6)return;e.stopPropagation();pick(f.id,false)})}
   for(const g of document.querySelectorAll(".mk")){g.addEventListener("click",onMarker);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();onMarker.call(g,e)}})}
 }
 /* Hwaseong Fortress illustration: Paldalmun-style gate with two-tier roof and crenellated walls */
-let fortG=null;
+let fortG=null, fortT=null, hwT=null;
 function fortress(){
   const g=el("g",{id:"fortIll","aria-hidden":"true"},world); fortG=g;
   const stone="#D8C7A6", stoneL="#E8DBC0", stoneD="#B39C76", ink="#4A3A28", roof="#3E464F", roofL="#5A636D", pillar="#A8432F", green="#3F7D6B";
@@ -267,12 +319,25 @@ function fortress(){
   el("path",{d:"M-38 -36 L-29 -34 L-38 -31 Z",fill:"#E0A526"},g);
   /* label under the drawing */
   const t=el("text",{x:0,y:16,"text-anchor":"middle","font-size":11.5,"font-weight":700,fill:"#6E5232",stroke:"#F7F1E6","stroke-width":3.5,"paint-order":"stroke","stroke-linejoin":"round"},g);
-  t.textContent="수원화성";
+  t.textContent="수원화성"; fortT=t;
+}
+/* ---------- language: texts drawn inside the map ---------- */
+function relabel(){
+  for(const f of markers){const name=labelOf(f);f.lt.textContent=name;
+    let w=0;try{w=f.lt.getComputedTextLength()}catch(e){}
+    if(!w){for(const ch of name)w+=/[\x00-\x7F]/.test(ch)?7.2:12.8}
+    f.lw=w+16;f.lr.setAttribute("width",f.lw);
+    f.g.setAttribute("aria-label",`${fx(f,"name")}, ${catName(f.cat)}`)}
+  for(const p of PK)p.g.setAttribute("aria-label",L(`${p.name} 주차장, ${p.cells}면`,`${pName(p)}, ${p.cells} spaces`));
+  for(const d of DATA.districts)d.t.textContent=guName(d.name);
+  fortT.textContent=L("수원화성","Hwaseong Fortress");
+  hwT.textContent=L("수원 경계 밖 화성시","Outside Suwon, Hwaseong-si");
 }
 /* ---------- view transform ---------- */
 const PRI=["SUDC-001","SUDC-017","SUDC-002","SUDC-003","SUDC-004","SUDC-007","SUDC-008","SUDC-006","SUDC-005","SUDC-009","SUDC-015","SUDC-016","SUDC-011","SUDC-014"];
 function apply(){
   world.setAttribute("transform",`translate(${T.x},${T.y}) scale(${T.k})`);
+  document.body.classList.toggle("zoomed",innerWidth<900&&baseK>0&&(T.k>baseK*1.06||T.k<baseK*.94||Math.abs(T.x-fitX)>24||Math.abs(T.y-fitY)>24));
   const s=Math.min(1.25,Math.max(.62,Math.pow(T.k,.35)))/T.k, sc=s*T.k;
   /* spread markers that sit on top of each other on screen (display only, true position kept for 길찾기) */
   const vis=markers.filter(f=>!f.g.classList.contains("hide"));
@@ -288,7 +353,7 @@ function apply(){
   for(const p of PK)p.g.setAttribute("transform",`translate(${p.x},${p.y}) scale(${s*.9})`);
   if(fortG)fortG.setAttribute("transform",`translate(${DATA.fort.x},${DATA.fort.y+14/T.k}) scale(${s*.82})`);
   /* labels: every visible facility keeps its name; try 16 spots around the building, take the first free one */
-  const v=visibleRect(), placed=[], L=Math.max(sc,.8);
+  const v=visibleRect(), placed=[], L=Math.max(sc,narrow()?.88:.8);
   for(const f of vis){const big=f.grade==="A";placed.push({x:f.sx+f.ox-(big?17:11)*sc,y:f.sy+f.oy-(big?46:24)*sc,w:(big?34:22)*sc,h:(big?54:30)*sc})}
   {const k=s*.82*T.k,fx=T.k*DATA.fort.x+T.x,fy=T.k*DATA.fort.y+T.y+14;placed.push({x:fx-44*k,y:fy-74*k,w:88*k,h:96*k})}
   {const hw=F.find(f=>f.id==="SUDC-005");if(!$("#hwdeco").classList.contains("hide"))placed.push({x:T.k*(hw.x+28)+T.x,y:T.k*(hw.y+18)+T.y,w:132*T.k,h:16*T.k})}
@@ -300,7 +365,7 @@ function apply(){
   for(const f of markers){const show=vis.includes(f);f.lg.classList.toggle("hide",!show);f.ld.classList.toggle("hide",true)}
   for(const f of order){
     const big=f.grade==="A",bx=f.sx+f.ox,by=f.sy+f.oy,W=f.lw*L,H=20*L,top=by-(big?46:24)*sc,bot=by+10*sc,bw=(big?17:11)*sc,mid=by-(big?20:12)*sc-H/2;
-    const c=[];for(const far of [0,.5,1,1.6]){const e=far*(H+6),side=far*24;
+    const c=[];for(const far of [0,.5,1,1.6,2.3,3.1]){const e=far*(H+6),side=far*24;
       c.push([bx-W/2,top-H-3-e],[bx-W/2,bot+3+e],[bx+bw+5+side,mid],[bx-bw-5-side-W,mid],
              [bx+3+side,top-H-3-e],[bx-3-side-W,top-H-3-e],[bx+3+side,bot+3+e],[bx-3-side-W,bot+3+e])}
     let best=null,bs=1e18;
@@ -308,7 +373,7 @@ function apply(){
       const out=Math.max(0,v.x+4-x)+Math.max(0,x+W-(v.x+v.w-4))+Math.max(0,v.y+4-y)+Math.max(0,y+H-(v.y+v.h-4));
       const cx=x+W/2,cy=y+H/2,dist=Math.hypot(cx-bx,cy-by);
       for(const l of leaders){if(cross(bx,by-(big?24:12)*sc,cx,cy,l))sc2+=W*H*.6}
-      sc2+=out*H*4+dist*H*.05; if(sc2<bs){bs=sc2;best={x,y,i}}});
+      sc2+=out*H*4+dist*H*.16; if(sc2<bs){bs=sc2;best={x,y,i}}});
     f.lg.setAttribute("transform",`translate(${best.x},${best.y}) scale(${L})`);
     placed.push({x:best.x,y:best.y,w:W,h:H});
     if(best.i>=8){f.ld.setAttribute("stroke",COLOR[f.cat]||"#5B6B76");const lx=Math.min(Math.max(bx,best.x),best.x+W),ly=Math.min(Math.max(by-(big?24:12)*sc,best.y),best.y+H);
@@ -318,11 +383,24 @@ function apply(){
 function visibleRect(){
   const r=mapEl.getBoundingClientRect(); const wide=innerWidth>=900;
   const topH=wide?110:($(".top").getBoundingClientRect().bottom+4);
-  const sh=wide?0:(innerHeight-sheet.getBoundingClientRect().top);
+  const sh=wide?0:(sheet.dataset.s==="peek"?peekPx:innerHeight-sheet.getBoundingClientRect().top);
   return {x:0,y:topH-r.top,w:r.width,h:Math.max(120,r.height-(topH-r.top)-sh)};
 }
+let peekPx=148, baseK=0, fitX=0, fitY=0;
 function fit(anim){
-  const b=DATA.bbox, hw=F.find(f=>f.id==="SUDC-005"); const x0=b[0]-30,x1=b[2]+70,y0=b[1]-50,y1=Math.max(b[3],hw.y)+36;
+  const b=DATA.bbox, hw=F.find(f=>f.id==="SUDC-005");
+  if(innerWidth<900){
+    /* phone: fill the width, sit right under the header, give the rest of the screen to the list */
+    const x0=b[0]-14,x1=b[2]+14,y0=b[1]-34,y1=Math.max(b[3],hw.y)+64;
+    const r=mapEl.getBoundingClientRect(), topY=$(".top").getBoundingClientRect().bottom-r.top+6;
+    const maxH=innerHeight-topY-160;
+    const k=Math.min(r.width/(x1-x0),maxH/(y1-y0));
+    const mapBottom=topY+k*(y1-y0);
+    const np=Math.round(Math.min(innerHeight*.55,Math.max(148,innerHeight-mapBottom-6)));
+    if(sheet.dataset.s==="peek"&&np!==peekPx){peekPx=np;setSheet("peek")}
+    baseK=k; fitX=r.width/2-k*(x0+x1)/2; fitY=topY-k*y0; go(k,fitX,fitY,anim);return;
+  }
+  const x0=b[0]-30,x1=b[2]+70,y0=b[1]-50,y1=Math.max(b[3],hw.y)+36;
   const v=visibleRect(); const k=Math.min(v.w/(x1-x0),v.h/(y1-y0));
   go(k, v.x+v.w/2-k*(x0+x1)/2, v.y+v.h/2-k*(y0+y1)/2, anim);
 }
@@ -354,7 +432,8 @@ $("#zfit").onclick=()=>fit(true);
 /* ---------- filters ---------- */
 function chips(){
   const box=$("#chips"); const all=[["전체",null],...CATS];
-  box.innerHTML=all.map(([n,c])=>`<button type="button" class="chip" data-cat="${n}" aria-pressed="${n===cat}">${c?`<span class="sw" style="background:${c}"></span>`:""}${n}</button>`).join("");
+  box.setAttribute("aria-label",L("목적별로 보기","Filter by purpose"));
+  box.innerHTML=all.map(([n,c])=>`<button type="button" class="chip" data-cat="${n}" aria-pressed="${n===cat}">${c?`<span class="sw" style="background:${c}"></span>`:""}${esc(catName(n))}</button>`).join("");
   box.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{setCat(b.dataset.cat===cat&&cat!=="전체"?"전체":b.dataset.cat)});
 }
 function setCat(c){cat=c;selected=null;view="list";query="";$("#q").value="";chips();refresh();if(innerWidth<900&&!sheet.classList.contains("full"))setSheet("half")}
@@ -372,29 +451,37 @@ function refresh(){
 /* ---------- panel ---------- */
 const telLinks=s=>esc(s).replace(/(\d{2,4}-\d{3,4}-\d{4})/g,'<a href="tel:$1">$1</a>');
 function row(dt,dd,html){return dd?`<div><dt>${dt}</dt><dd>${html?dd:esc(dd)}</dd></div>`:""}
-function rowAll(dt,dd,html){return `<div><dt>${dt}</dt><dd${dd?"":' class="none"'}>${dd?(html?dd:esc(dd)):"없음"}</dd></div>`}
+function rowAll(dt,dd,html){return `<div><dt>${dt}</dt><dd${dd?"":' class="none"'}>${dd?(html?dd:esc(dd)):L("없음","None")}</dd></div>`}
 function itemsFor(){
   const q=query.trim();
-  let fac=F.filter(f=>q?(f.name+f.what+f.facilities+f.type).includes(q):inCat(f));
-  let pk=(q||cat==="주차하기")?PK.filter(p=>q?p.name.includes(q):true):[];
+  const ql=q.toLowerCase(), E=f=>EN.facilities[f.id]||{};
+  const hay=f=>(f.name+f.what+f.facilities+f.type+" "+[E(f).name,E(f).what,E(f).facilities,E(f).type].join(" ")).toLowerCase();
+  let fac=F.filter(f=>q?hay(f).includes(ql):inCat(f));
+  let pk=(q||cat==="주차하기")?PK.filter(p=>q?(p.name+" "+(EN.parking[p.name]||"")).toLowerCase().includes(ql):true):[];
   return {fac,pk};
 }
 function render(){
   if(view==="detail"&&selected){renderDetail();return}
   const {fac,pk}=itemsFor(); const n=fac.length+pk.length;
-  $("#sumTitle").textContent=query?`'${query}' 검색 결과`:(cat==="전체"?"전체 사업장":cat);
-  $("#sumCnt").textContent=`${n}곳`;
+  $("#sumTitle").textContent=query?L(`'${query}' 검색 결과`,`Results for '${query}'`):(cat==="전체"?L("전체 사업장","All places"):catName(cat));
+  $("#sumCnt").textContent=L(`${n}곳`,`${n} ${n===1?"place":"places"}`);
   const li=f=>`<li><button type="button" data-id="${f.id}"><span class="bar6" style="background:${COLOR[f.cat]}"></span>
-    <span><span class="nm">${esc(f.name)}${f.status==="확인 필요"?'<span class="flag">정보 확인 중</span>':""}</span>
-    <span class="meta">${esc(f.cat)}, ${esc(f.gu)}${f.display==="서비스 안내"?", 방문 시설 아님":""}</span></span>
-    <span class="side">${f.display==="레이어"?"지도 보기":""}</span></button></li>`;
+    <span><span class="nm">${esc(fx(f,"name"))}${f.status==="확인 필요"?`<span class="flag">${L("정보 확인 중","Checking")}</span>`:""}</span>
+    <span class="meta">${esc(catName(f.cat))}, ${esc(guName(f.gu))}${f.display==="서비스 안내"?L(", 방문 시설 아님",", not a walk-in facility"):""}</span></span>
+    <span class="side">${f.display==="레이어"?L("지도 보기","Show on map"):""}</span></button></li>`;
   const lp=p=>`<li><button type="button" data-id="${p.id}"><span class="bar6" style="background:#3355C8"></span>
-    <span><span class="nm">${esc(p.name)}</span><span class="meta">${esc(p.div)} 주차장</span></span><span class="side">${p.cells.toLocaleString()}면</span></button></li>`;
+    <span><span class="nm">${esc(pName(p))}</span><span class="meta">${L(esc(p.div)+" 주차장",(DIV_EN[p.div]||p.div)+" parking")}</span></span><span class="side">${L(p.cells.toLocaleString()+"면",p.cells.toLocaleString()+" spaces")}</span></button></li>`;
   let h="";
-  if(!n)h=`<p class="empty">찾는 시설이 없습니다. 다른 이름으로 검색하거나 위의 목적 버튼을 눌러 보세요.</p>`;
+  if(lang==="en"&&!query&&cat==="전체")h+=`<div class="about"><h2>About Suwon Urban Development Corporation</h2>
+    <p>Suwon Urban Development Corporation (SUDC) is a local public corporation of Suwon City. It runs community and sports centers, a campground, public parking lots, a memorial park, a recycling center and mobility services for residents.</p>
+    <p>Tap a building on the map, or pick a place below, to see what it does, its opening hours and how to get there.</p></div>`;
+  if(!n)h=`<p class="empty">${L("찾는 시설이 없습니다. 다른 이름으로 검색하거나 위의 목적 버튼을 눌러 보세요.","No matching places. Try another name, or tap a purpose button above.")}</p>`;
   if(fac.length)h+=`<ul class="list">${fac.map(li).join("")}</ul>`;
-  if(pk.length)h+=`<p class="grouph">공영주차장 ${pk.length}곳</p><ul class="list">${pk.sort((a,b)=>a.name.localeCompare(b.name,"ko")).map(lp).join("")}</ul>`;
-  h+=`<div class="foot"><p>베타 버전입니다. 수원도시공사 홈페이지를 기준으로 만들었고, 전화번호와 주소는 담당 부서 확인을 거쳤습니다.</p>
+  if(pk.length)h+=`<p class="grouph">${L(`공영주차장 ${pk.length}곳`,`Public parking: ${pk.length} lots`)}</p><ul class="list">${pk.sort((a,b)=>lang==="en"?pName(a).localeCompare(pName(b),"en"):a.name.localeCompare(b.name,"ko")).map(lp).join("")}</ul>`;
+  h+=lang==="en"?`<div class="foot"><p>This is a beta version, built from the SUDC website. Phone numbers and addresses have been checked with the facilities.</p>
+  <p>Building positions on the map are approximate. Use the directions buttons for the exact route.</p>
+  <p>Sources: SUDC website and public parking website; locations from Kakao Map; district boundaries from Statistics Korea SGIS (2018, KOGL Type 1).</p></div>`
+  :`<div class="foot"><p>베타 버전입니다. 수원도시공사 홈페이지를 기준으로 만들었고, 전화번호와 주소는 담당 부서 확인을 거쳤습니다.</p>
   <p>지도의 건물 위치는 대략적입니다. 정확한 길은 각 시설의 '길찾기'로 카카오맵에서 확인하세요.</p>
   <p>출처: 수원도시공사 홈페이지·공영주차장 통합홈페이지, 위치는 카카오맵, 구 경계는 통계청 SGIS(2018, 공공누리 제1유형).</p></div>`;
   body.innerHTML=h;
@@ -410,30 +497,33 @@ function pick(id,fromList){
   body.scrollTop=0; if(fromList)setTimeout(()=>body.querySelector("h2")?.focus(),50);
 }
 function renderDetail(){
-  const f=selected, isP=f.id.startsWith("P");
+  const f=selected, isP=f.id.startsWith("P"), nm=nameOf(f);
   const color=isP?"#3355C8":COLOR[f.cat];
-  $("#sumTitle").textContent=isP?"주차장 정보":"시설 정보"; $("#sumCnt").textContent="";
-  const dir=f.lat?`https://map.kakao.com/link/to/${encodeURIComponent(f.name)},${f.lat},${f.lng}`:"";
-  let h=`<div class="detail"><button type="button" class="back" id="back">← 목록으로</button><br>
-    <span class="tag" style="background:${color}">${esc(isP?"주차하기":f.cat)}</span>
-    <h2 tabindex="-1">${esc(f.name)}</h2>`;
+  $("#sumTitle").textContent=isP?L("주차장 정보","Parking lot"):L("시설 정보","Place details"); $("#sumCnt").textContent="";
+  const dir=f.lat?`https://map.kakao.com/link/to/${encodeURIComponent(nm)},${f.lat},${f.lng}`:"";
+  const gmap=f.lat?`https://www.google.com/maps/search/?api=1&query=${f.lat},${f.lng}`:"";
+  const dirTxt=L("카카오맵 길찾기","Directions (Kakao Map)");
+  let h=`<div class="detail"><button type="button" class="back" id="back">${L("← 목록으로","← Back to list")}</button><br>
+    <span class="tag" style="background:${color}">${esc(isP?catName("주차하기"):catName(f.cat))}</span>
+    <h2 tabindex="-1">${esc(nm)}</h2>`;
   if(isP){
-    h+=`<p class="sub">${esc(f.div)} 주차장, ${esc(f.op)} 운영</p>
-    <dl class="info">${row("주차면",f.cells.toLocaleString()+"면")}${(f.fast!=null||f.slow!=null)?row("전기차 충전",`급속 ${f.fast??0}대, 완속 ${f.slow??0}대`):""}
-    ${row("실시간",f.live?"통합홈페이지에서 남은 자리를 볼 수 있습니다.":"현장에서 운영하는 주차장입니다.")}</dl>
-    <p class="note info">주차면과 충전기 수는 2026-10-29 공영주차장 통합홈페이지 기준입니다.</p>
-    <div class="acts">${dir?`<a class="primary" href="${dir}" target="_blank" rel="noopener">카카오맵 길찾기</a>`:""}<a href="https://parking.suwonudc.co.kr/" target="_blank" rel="noopener">실시간 주차 현황</a><a href="https://parking.suwonudc.co.kr/prepay/list" target="_blank" rel="noopener">요금 사전결제</a></div>`;
+    h+=`<p class="sub">${L(`${esc(f.div)} 주차장, ${esc(f.op)} 운영`,`${DIV_EN[f.div]||f.div} parking, run by ${opName(f.op)}`)}</p>
+    <dl class="info">${row(L("주차면","Spaces"),L(f.cells.toLocaleString()+"면",f.cells.toLocaleString()))}${(f.fast!=null||f.slow!=null)?row(L("전기차 충전","EV charging"),L(`급속 ${f.fast??0}대, 완속 ${f.slow??0}대`,`Fast ${f.fast??0}, slow ${f.slow??0}`)):""}
+    ${row(L("실시간","Live status"),f.live?L("통합홈페이지에서 남은 자리를 볼 수 있습니다.","Free spaces are shown on the parking website."):L("현장에서 운영하는 주차장입니다.","Staffed on site; no live data."))}</dl>
+    <p class="note info">${L("주차면과 충전기 수는 2026-10-29 공영주차장 통합홈페이지 기준입니다.","Spaces and chargers as listed on the SUDC parking website on 2026-10-29.")}</p>
+    <div class="acts">${dir?`<a class="primary" href="${dir}" target="_blank" rel="noopener">${dirTxt}</a>`:""}<a href="https://parking.suwonudc.co.kr/" target="_blank" rel="noopener">${L("실시간 주차 현황","Live parking status")}</a>${lang==="en"&&gmap?`<a href="${gmap}" target="_blank" rel="noopener">Google Maps</a>`:`<a href="https://parking.suwonudc.co.kr/prepay/list" target="_blank" rel="noopener">요금 사전결제</a>`}</div>`;
   } else {
-    h+=`<p class="sub">${esc(f.type)}, ${esc(f.gu)}</p>`;
-    if(f.status==="확인 필요")h+=`<p class="note">이곳의 전화번호나 주소가 자료마다 달라 확인하고 있습니다. 방문 전 시설 홈페이지에서 한 번 더 확인해 주세요.</p>`;
-    if(f.id==="SUDC-005")h+=`<p class="note info">수원 경계 밖 화성시에 있으며, 수원도시공사가 운영합니다.</p>`;
-    if(f.display==="서비스 안내")h+=`<p class="note info">시민이 찾아가는 시설이 아니라 전화·온라인으로 이용하는 서비스입니다.</p>`;
-    h+=`<p class="what">${esc(f.what)}</p><dl class="info">
-      ${rowAll("주소",f.addr)}${rowAll("전화",telLinks(f.tel),true)}${rowAll("기타 연락",telLinks(f.tel2),true)}
-      ${rowAll("운영시간",f.hours)}${rowAll("휴관일",f.closed)}${rowAll("주요 시설",f.facilities)}</dl>
-      <div class="acts">${dir?`<a class="primary" href="${dir}" target="_blank" rel="noopener">카카오맵 길찾기</a>`:""}
-      ${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener">${f.id==="SUDC-012"?"통합홈페이지":"시설 홈페이지"}</a>`:""}
-      ${f.kakao?`<a href="${esc(f.kakao)}" target="_blank" rel="noopener">카카오맵 장소 정보</a>`:""}</div>`;
+    h+=`<p class="sub">${esc(fx(f,"type"))}, ${esc(guName(f.gu))}</p>`;
+    if(f.status==="확인 필요")h+=`<p class="note">${L("이곳의 전화번호나 주소가 자료마다 달라 확인하고 있습니다. 방문 전 시설 홈페이지에서 한 번 더 확인해 주세요.","Some contact details for this place are still being checked. Please confirm on the facility website before visiting.")}</p>`;
+    if(f.id==="SUDC-005")h+=`<p class="note info">${L("수원 경계 밖 화성시에 있으며, 수원도시공사가 운영합니다.","Located in Hwaseong-si, just outside Suwon, and run by SUDC.")}</p>`;
+    if(f.display==="서비스 안내")h+=`<p class="note info">${L("시민이 찾아가는 시설이 아니라 전화·온라인으로 이용하는 서비스입니다.","This is a phone or online service, not a place to visit.")}</p>`;
+    if(lang==="en")h+=`<p class="note info">Phone lines and websites are in Korean.</p>`;
+    h+=`<p class="what">${esc(fx(f,"what"))}</p><dl class="info">
+      ${rowAll(L("주소","Address"),fx(f,"addr"))}${rowAll(L("전화","Phone"),telLinks(f.tel),true)}${rowAll(L("기타 연락","Other contact"),telLinks(fx(f,"tel2")),true)}
+      ${rowAll(L("운영시간","Hours"),fx(f,"hours"))}${rowAll(L("휴관일","Closed"),fx(f,"closed"))}${rowAll(L("주요 시설","Facilities"),fx(f,"facilities"))}</dl>
+      <div class="acts">${dir?`<a class="primary" href="${dir}" target="_blank" rel="noopener">${dirTxt}</a>`:""}
+      ${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener">${f.id==="SUDC-012"?L("통합홈페이지","Parking website"):L("시설 홈페이지","Facility website")}</a>`:""}
+      ${lang==="en"?(gmap?`<a href="${gmap}" target="_blank" rel="noopener">Google Maps</a>`:""):(f.kakao?`<a href="${esc(f.kakao)}" target="_blank" rel="noopener">카카오맵 장소 정보</a>`:"")}</div>`;
   }
   h+=`</div>`; body.innerHTML=h;
   $("#back").onclick=()=>{view="list";selected=null;refresh()};
@@ -443,7 +533,7 @@ $("#q").addEventListener("input",e=>{query=e.target.value;view="list";selected=n
 
 /* ---------- bottom sheet (mobile) ---------- */
 function setSheet(s){sheet.classList.remove("half","full");if(s!=="peek")sheet.classList.add(s);sheet.dataset.s=s;
-  document.documentElement.style.setProperty("--sheet-peek",innerWidth<900?"148px":"0px")}
+  document.documentElement.style.setProperty("--sheet-peek",innerWidth<900?peekPx+"px":"0px")}
 const grab=$("#grab"); let sy=null, sStart=0, sMoved=0;
 grab.addEventListener("pointerdown",e=>{if(innerWidth>=900)return;sy=e.clientY;sMoved=0;sStart=sheet.getBoundingClientRect().top;sheet.classList.add("dragging");grab.setPointerCapture(e.pointerId)});
 grab.addEventListener("pointermove",e=>{if(sy===null)return;const dy=e.clientY-sy;sMoved=Math.abs(dy);const top=Math.max(innerHeight*.12,sStart+dy);
@@ -455,9 +545,34 @@ grab.addEventListener("pointerup",e=>{if(sy===null)return;sheet.classList.remove
   sy=null});
 mapEl.addEventListener("pointerdown",()=>{if(innerWidth<900&&sheet.dataset.s==="full")setSheet("half")});
 
+/* ---------- language switch ---------- */
+function applyStatic(){
+  document.documentElement.lang=lang;
+  document.title=L("시민과 함께, 수원도시공사 사업장 안내","Suwon Urban Development Corporation: Places Map");
+  $("#ttl").textContent=L("시민과 함께, 수원도시공사 사업장 안내",narrow()?"Places run by SUDC":"Places run by Suwon Urban Development Corporation");
+  $("#betaTag").textContent=L("베타","Beta");
+  $("#subt").textContent=L("가까운 공사 시설의 위치와 하는 일을 확인하세요.","Find SUDC facilities near you and see what each one offers.");
+  $("#q").placeholder=L("시설 이름으로 찾기 (예: 수영장, 캠핑)","Search by name (e.g. swimming, camping)");
+  $("#q").setAttribute("aria-label",L("시설 이름으로 찾기","Search places by name"));
+  $("#zin").setAttribute("aria-label",L("지도 확대","Zoom in"));$("#zout").setAttribute("aria-label",L("지도 축소","Zoom out"));
+  $("#zfit").setAttribute("aria-label",L("수원 전체 보기","Show all of Suwon"));$("#zfit").textContent=L("전체","All");
+  $("#grab").setAttribute("aria-label",L("목록 패널 펼치기 또는 접기","Expand or collapse the list"));
+  sheet.setAttribute("aria-label",L("사업장 목록과 상세 정보","List of places and details"));
+  mapEl.setAttribute("aria-label",L("수원도시공사 사업장 일러스트 지도. 같은 내용을 목록에서도 볼 수 있습니다.","Illustrated map of SUDC places. The same places are listed in the panel."));
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
+}
+function setLang(l){
+  if(l===lang)return; lang=l;
+  try{localStorage.setItem("sudc-map-lang",l)}catch(e){}
+  try{history.replaceState(null,"",l==="en"?"#en":location.pathname+location.search)}catch(e){}
+  applyStatic(); chips(); relabel(); refresh();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+addEventListener("hashchange",()=>{if(location.hash==="#en")setLang("en")});
 /* ---------- start ---------- */
-chips(); draw(); setSheet("peek"); refresh(); requestAnimationFrame(()=>fit(false));
-let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>fit(false),150)});
+applyStatic(); chips(); draw(); relabel(); setSheet("peek"); refresh(); requestAnimationFrame(()=>fit(false));
+try{document.fonts&&document.fonts.ready.then(()=>{relabel();apply()})}catch(e){}
+let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{applyStatic();relabel();fit(false)},150)});
 </script>
 </body>
 </html>
